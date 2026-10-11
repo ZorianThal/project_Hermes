@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Экосистема колледжа — прототип</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<!-- ЭКРАН АВТОРИЗАЦИИ -->
+<div id="auth-screen" class="auth-screen">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c0 1.1 2.7 3 6 3s6-1.9 6-3v-5"/></svg>
+    </div>
+    <h1>Экосистема колледжа</h1>
+    <p class="muted">Прототип. Дизайн будет доработан позже.</p>
+
+    <div class="tabs-switch">
+      <button id="tab-login" class="switch-btn active">Вход</button>
+      <button id="tab-register" class="switch-btn">Регистрация студента</button>
+    </div>
+
+    <form id="login-form" class="auth-form">
+      <input type="text" id="login-username" placeholder="Логин" required>
+      <input type="password" id="login-password" placeholder="Пароль" required>
+      <button type="submit">Войти</button>
+      <div class="hint">По умолчанию администратор: <b>admin / admin123</b></div>
+      <div class="error" id="login-error"></div>
+    </form>
+
+    <form id="register-form" class="auth-form hidden">
+      <input type="text" id="reg-fullname" placeholder="ФИО" required>
+      <input type="text" id="reg-username" placeholder="Логин" required>
+      <input type="password" id="reg-password" placeholder="Пароль" required>
+      <select id="reg-group" required></select>
+      <button type="submit">Зарегистрироваться</button>
+      <div class="error" id="register-error"></div>
+    </form>
+  </div>
+</div>
+
+<!-- ОСНОВНОЕ ПРИЛОЖЕНИЕ -->
+<div id="app" class="app hidden">
+  <!-- Верхняя панель — видна только на мобильных экранах: логотип + выход -->
+  <div class="mobile-topbar">
+    <div class="brand">
+      <div class="brand-logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c0 1.1 2.7 3 6 3s6-1.9 6-3v-5"/></svg>
+      </div>
+      <div class="brand-text">Колледж</div>
+    </div>
+    <div class="mobile-topbar-actions">
+      <button class="nav-btn mobile-topbar-icon-btn" data-view="settings" title="Настройки">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
+      </button>
+      <button id="logout-btn-mobile" class="logout-btn-mobile" title="Выйти">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c0 1.1 2.7 3 6 3s6-1.9 6-3v-5"/></svg>
+      </div>
+      <div class="brand-text">Колледж</div>
+    </div>
+    <nav class="nav">
+      <button class="nav-btn active" data-view="feed">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1.4"/></svg>
+        <span>Лента</span>
+      </button>
+      <button class="nav-btn" data-view="chats">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5Z"/></svg>
+        <span>Чаты</span>
+      </button>
+      <button class="nav-btn" data-view="assignments">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M9 12h6M9 16h6"/></svg>
+        <span>Задания</span>
+      </button>
+      <button class="nav-btn" data-view="map">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+        <span>Карта</span>
+      </button>
+      <button class="nav-btn" data-view="leaderboard">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4Z"/><path d="M17 5h3a2 2 0 0 1 2 2 5 5 0 0 1-5 5M7 5H4a2 2 0 0 0-2 2 5 5 0 0 0 5 5"/></svg>
+        <span>Рейтинг</span>
+      </button>
+      <button class="nav-btn hidden" id="nav-shop" data-view="shop">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span>Магазин</span>
+      </button>
+      <button class="nav-btn" data-view="profile">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span>Профиль</span>
+      </button>
+      <button class="nav-btn" data-view="settings">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
+        <span>Настройки</span>
+      </button>
+      <button class="nav-btn hidden" id="nav-admin" data-view="admin">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg>
+        <span>Админ-панель</span>
+        <span class="count-badge hidden" id="nav-admin-count" style="margin-left:auto;"></span>
+      </button>
+      <button class="nav-btn hidden" id="nav-backups" data-view="backups">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12c0 1.66-4.03 3-9 3s-9-1.34-9-3M4 6v14c0 1.66 4.03 3 9 3s9-1.34 9-3V6"/><ellipse cx="12" cy="6" rx="9" ry="3"/></svg>
+        <span>Бэкапы</span>
+      </button>
+    </nav>
+    <div class="sidebar-footer">
+      <div id="me-name" class="me-name"></div>
+      <button id="logout-btn" class="logout-btn">
+        <svg class="icon" style="width:16px;height:16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Выйти
+      </button>
+    </div>
+  </aside>
+
+  <!-- Нижняя панель навигации — видна только на мобильных экранах -->
+  <nav class="bottom-nav">
+    <button class="nav-btn active" data-view="feed">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1.4"/></svg>
+    </button>
+    <button class="nav-btn" data-view="chats">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5Z"/></svg>
+    </button>
+    <button class="nav-btn" data-view="assignments">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M9 12h6M9 16h6"/></svg>
+    </button>
+    <button class="nav-btn hidden" id="nav-shop-mobile" data-view="shop">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+    </button>
+    <button class="nav-btn" data-view="profile">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    </button>
+    <button class="nav-btn hidden" id="nav-admin-mobile" data-view="admin">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg>
+    </button>
+  </nav>
+
+  <main class="main">
+
+    <!-- ЛЕНТА НОВОСТЕЙ -->
+    <section id="view-feed" class="view">
+      <div class="greeting-header" id="feed-greeting">
+        <h2 id="feed-greeting-text">Добро пожаловать</h2>
+        <div class="muted" id="feed-greeting-sub">Вот что нового в колледже</div>
+      </div>
+
+      <div class="progress-card">
+        <div class="progress-card-text">
+          <div class="progress-card-title">Ты на пути к новой вершине</div>
+          <div class="progress-card-xp"><span id="feed-progress-xp"></span></div>
+          <div class="xp-bar"><div class="xp-bar-fill" id="feed-progress-fill"></div></div>
+        </div>
+        <div class="level-badge">
+          <div class="level-badge-num" id="feed-progress-level"></div>
+          <div class="level-badge-lbl">уровень</div>
+        </div>
+      </div>
+
+      <div class="shortcuts-row" id="feed-shortcuts"></div>
+
+      <form id="feed-composer" class="composer hidden">
+        <div class="composer-row">
+          <textarea id="feed-composer-text" placeholder="Поделитесь новостью с колледжем..." rows="2"></textarea>
+        </div>
+        <div id="feed-composer-preview" class="composer-preview hidden"></div>
+        <div class="composer-actions">
+          <label class="composer-attach">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05 12.25 20.24a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+            Фото/видео
+            <input type="file" id="feed-composer-file" accept="image/*,video/*" hidden>
+          </label>
+          <span class="muted" id="feed-composer-filename"></span>
+          <button type="submit" class="primary-btn">Опубликовать в ленту</button>
+        </div>
+        <div class="error" id="feed-composer-error"></div>
+      </form>
+
+      <div class="muted feed-hint" id="feed-student-hint">Публиковать в общую ленту могут только преподаватели и администрация. Украсить свой профиль фото и видео можно на вкладке «Профиль».</div>
+
+      <div id="feed-list" class="posts-list"></div>
+    </section>
+
+    <!-- ЧАТЫ -->
+    <section id="view-chats" class="view hidden">
+      <div class="chats-layout">
+        <div class="chats-panel">
+          <div class="chats-panel-header">
+            <h2>Чаты</h2>
+            <button class="icon-btn" id="btn-new-chat" title="Новый чат">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
+          </div>
+
+          <div class="chats-search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="chats-search-input" placeholder="Поиск по чатам...">
+          </div>
+
+          <div class="stories-strip" id="stories-strip"></div>
+
+          <div class="chat-filter-tabs">
+            <button class="chat-filter-tab active" data-filter="all">Все</button>
+            <button class="chat-filter-tab" data-filter="direct">Личные</button>
+            <button class="chat-filter-tab" data-filter="group">Группы</button>
+          </div>
+
+          <div class="chats-list" id="chats-list"></div>
+        </div>
+        <div class="chat-window">
+          <div class="chat-header">
+            <button class="chat-back-btn" id="chat-back-btn" aria-label="Назад к списку чатов">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            </button>
+            <span id="chat-header-title">Выберите чат</span>
+          </div>
+          <div class="chat-messages" id="chat-messages"></div>
+          <div id="chat-attach-preview" class="composer-preview hidden" style="margin: 0 16px;"></div>
+          <form id="chat-send-form" class="chat-send-form hidden">
+            <label class="chat-attach-btn" title="Прикрепить фото или видео">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05 12.25 20.24a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+              <input type="file" id="chat-file-input" accept="image/*,video/*" hidden>
+            </label>
+            <input type="text" id="chat-input" placeholder="Сообщение..." autocomplete="off">
+            <button type="submit">➤</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ЗАДАНИЯ -->
+    <section id="view-assignments" class="view hidden">
+      <div class="view-header">
+        <h2>Задания</h2>
+        <div style="display:flex; gap:8px;">
+          <button class="secondary-btn map-quick-btn" data-view="map">🗺 Карта</button>
+          <button id="btn-new-assignment" class="primary-btn hidden">+ Новое задание</button>
+        </div>
+      </div>
+      <div class="chat-filter-tabs hidden" id="assignments-filter-tabs" style="padding-left:0;">
+        <button class="chat-filter-tab active" data-assign-filter="active">Активные</button>
+        <button class="chat-filter-tab" data-assign-filter="completed">Выполненные</button>
+      </div>
+      <div id="assignments-list" class="assignments-list"></div>
+    </section>
+
+    <!-- КАРТА -->
+    <section id="view-map" class="view hidden">
+      <div class="view-header">
+        <h2>Карта точек интереса</h2>
+        <button class="secondary-btn" id="map-locate-btn">📍 Где я</button>
+      </div>
+      <p class="muted" style="margin-top:-8px; margin-bottom:14px;">
+        Отметки — это задания с дополненной реальностью. Подойдите к точке и наведите камеру, чтобы прочитать комментарий и получить награду.
+      </p>
+      <div id="ar-map" class="ar-map"></div>
+    </section>
+
+    <!-- РЕЙТИНГ -->
+    <section id="view-leaderboard" class="view hidden">
+      <div class="greeting-header">
+        <h2>Рейтинг студентов</h2>
+        <div class="muted">Кто вырвался вперёд по опыту и по выполненным заданиям</div>
+      </div>
+      <div class="tabs-switch" style="max-width:360px;">
+        <button id="leaderboard-tab-level" class="switch-btn active">По уровню</button>
+        <button id="leaderboard-tab-assignments" class="switch-btn">По заданиям</button>
+      </div>
+      <div id="leaderboard-level-list" class="leaderboard-list"></div>
+      <div id="leaderboard-assignments-list" class="leaderboard-list hidden"></div>
+    </section>
+
+    <!-- МАГАЗИН -->
+    <section id="view-shop" class="view hidden">
+      <div class="view-header">
+        <h2>Магазин</h2>
+        <div class="coin-balance" id="shop-coin-balance">
+          <span class="coin-icon">🪙</span> <span id="shop-coin-amount">0</span>
+        </div>
+      </div>
+      <p class="muted" style="margin-top:-8px; margin-bottom:18px;">
+        Покупайте мерч колледжа за золотые монетки — их можно заработать, выполняя задания.
+      </p>
+      <div id="shop-grid" class="shop-grid"></div>
+    </section>
+
+    <!-- ПРОФИЛЬ -->
+    <section id="view-profile" class="view hidden">
+      <div class="find-person-box">
+        <div class="field-label" style="margin-top:0;">Найти профиль другого человека</div>
+        <div class="chats-search" style="margin:0;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="find-person-input" placeholder="Имя или логин..." autocomplete="off">
+        </div>
+        <div id="find-person-results" class="user-search-results"></div>
+      </div>
+
+      <div class="profile-card">
+        <div class="avatar-wrap-outer">
+          <div class="avatar" id="profile-avatar"></div>
+          <button class="avatar-edit-btn" id="profile-avatar-edit-btn" title="Изменить аватар">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+          </button>
+        </div>
+        <h2 id="profile-name"></h2>
+        <div class="muted" id="profile-role"></div>
+        <div class="muted" id="profile-group"></div>
+
+        <div class="profile-pills">
+          <span class="pill" id="profile-since-pill"></span>
+        </div>
+
+        <div class="profile-bio" id="profile-bio-view">
+          <span id="profile-bio-text" class="muted"></span>
+          <button class="bio-edit-btn" id="profile-bio-edit-btn" title="Изменить описание">✎</button>
+        </div>
+        <form id="profile-bio-form" class="profile-bio-form hidden">
+          <textarea id="profile-bio-input" rows="2" maxlength="300" placeholder="Расскажите немного о себе..."></textarea>
+          <div class="profile-bio-actions">
+            <button type="button" class="secondary-btn" id="profile-bio-cancel">Отмена</button>
+            <button type="submit" class="primary-btn">Сохранить</button>
+          </div>
+        </form>
+        <div class="xp-block">
+          <div class="xp-label">
+            <span>Уровень <b id="profile-level"></b></span>
+            <span id="profile-xp-text"></span>
+          </div>
+          <div class="xp-bar"><div class="xp-bar-fill" id="profile-xp-fill"></div></div>
+        </div>
+
+        <div class="profile-stats">
+          <div class="profile-stat">
+            <div class="num" id="profile-stat-level"></div>
+            <div class="lbl">Уровень</div>
+          </div>
+          <div class="profile-stat">
+            <div class="num" id="profile-stat-xp"></div>
+            <div class="lbl">Всего XP</div>
+          </div>
+          <div class="profile-stat hidden" id="profile-stat-coins-tile">
+            <div class="num" id="profile-stat-coins">🪙 0</div>
+            <div class="lbl">Монеток</div>
+          </div>
+          <div class="profile-stat">
+            <div class="num" id="profile-stat-posts"></div>
+            <div class="lbl">Публикаций</div>
+          </div>
+        </div>
+
+        <button class="secondary-btn map-quick-btn" data-view="leaderboard" style="width:100%; margin-top:16px;">🏆 Смотреть рейтинг</button>
+      </div>
+
+      <div class="achievements-wrap">
+        <h3 style="display:flex; align-items:center; gap:8px;">
+          Достижения <span class="muted" id="achievements-progress"></span>
+        </h3>
+        <div id="achievements-grid" class="achievements-grid"></div>
+      </div>
+
+      <div class="profile-posts-wrap">
+        <h3>Оформление профиля</h3>
+        <p class="muted">Добавляйте фото, истории и видео — они будут видны только на вашей странице профиля.</p>
+
+        <form id="profile-composer" class="composer">
+          <div class="composer-row">
+            <textarea id="profile-composer-text" placeholder="Подпись к посту (необязательно)..." rows="2"></textarea>
+          </div>
+          <div id="profile-composer-preview" class="composer-preview hidden"></div>
+          <div class="composer-actions">
+            <label class="composer-attach">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05 12.25 20.24a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+              Фото/видео
+              <input type="file" id="profile-composer-file" accept="image/*,video/*" hidden>
+            </label>
+            <span class="muted" id="profile-composer-filename"></span>
+            <label class="composer-feed-toggle hidden" id="profile-feed-toggle">
+              <input type="checkbox" id="profile-composer-tofeed">
+              Также опубликовать в общую ленту
+            </label>
+            <button type="submit" class="primary-btn">Добавить в профиль</button>
+          </div>
+          <div class="error" id="profile-composer-error"></div>
+        </form>
+
+        <div id="profile-posts-grid" class="posts-grid"></div>
+      </div>
+    </section>
+
+    <!-- НАСТРОЙКИ -->
+    <section id="view-settings" class="view hidden">
+      <div class="greeting-header">
+        <h2>Настройки</h2>
+        <div class="muted">Внешний вид и поведение приложения — сохраняются в этом браузере</div>
+      </div>
+
+      <div class="settings-block">
+        <h3>Размер интерфейса</h3>
+        <p class="muted">Масштабирует весь интерфейс — удобно, если текст кажется слишком мелким или крупным.</p>
+        <div class="settings-option-row" id="settings-fontsize-row">
+          <button class="settings-option-btn" data-fontsize="sm">Мелкий</button>
+          <button class="settings-option-btn" data-fontsize="md">Обычный</button>
+          <button class="settings-option-btn" data-fontsize="lg">Крупный</button>
+        </div>
+      </div>
+
+      <div class="settings-block">
+        <h3>Цветовой акцент</h3>
+        <p class="muted">Основной цвет кнопок, ссылок и выделений в приложении.</p>
+        <div class="settings-color-row" id="settings-accent-row"></div>
+      </div>
+
+      <div class="settings-block">
+        <h3>Тема</h3>
+        <p class="muted">Тёмная тема экономит заряд на OLED-экранах и меньше устают глаза вечером.</p>
+        <div class="settings-option-row" id="settings-theme-row">
+          <button class="settings-option-btn" data-theme="dark">🌙 Тёмная</button>
+          <button class="settings-option-btn" data-theme="light">☀️ Светлая</button>
+        </div>
+      </div>
+
+      <div class="settings-block">
+        <h3>Плотность интерфейса</h3>
+        <p class="muted">Компактный режим уменьшает отступы — помещается больше контента на экране.</p>
+        <div class="settings-option-row" id="settings-density-row">
+          <button class="settings-option-btn" data-density="comfortable">Свободно</button>
+          <button class="settings-option-btn" data-density="compact">Компактно</button>
+        </div>
+      </div>
+
+      <div class="settings-block">
+        <h3>Другое</h3>
+        <label class="settings-toggle-row">
+          <div>
+            <div class="settings-toggle-label">Автовоспроизведение видео в историях</div>
+            <div class="muted">Видео в историях начинает играть сразу при открытии</div>
+          </div>
+          <input type="checkbox" id="settings-autoplay" class="settings-toggle">
+        </label>
+        <label class="settings-toggle-row">
+          <div>
+            <div class="settings-toggle-label">Уменьшить анимации</div>
+            <div class="muted">Отключает плавные переходы и эффекты наведения</div>
+          </div>
+          <input type="checkbox" id="settings-reduce-motion" class="settings-toggle">
+        </label>
+      </div>
+
+      <button class="secondary-btn" id="settings-reset-btn">Сбросить всё к значениям по умолчанию</button>
+    </section>
+
+    <!-- АДМИН -->
+    <section id="view-admin" class="view hidden">
+      <div class="view-header">
+        <h2>Админ-панель</h2>
+        <button class="secondary-btn map-quick-btn" data-view="backups">💾 Резервные копии</button>
+      </div>
+
+      <div class="stats-grid" id="admin-stats-grid"></div>
+      <div class="stats-chart-card">
+        <h3>Посещения за 7 дней</h3>
+        <div id="admin-visits-chart" class="visits-chart"></div>
+      </div>
+
+      <div class="admin-grid">
+        <div class="admin-block">
+          <h3>Добавить преподавателя</h3>
+          <form id="form-new-teacher" class="inline-form">
+            <input type="text" id="teacher-fullname" placeholder="ФИО" required>
+            <input type="text" id="teacher-username" placeholder="Логин" required>
+            <input type="password" id="teacher-password" placeholder="Пароль" required>
+            <button type="submit">Добавить</button>
+          </form>
+        </div>
+
+        <div class="admin-block">
+          <h3>Добавить группу</h3>
+          <form id="form-new-group" class="inline-form">
+            <input type="text" id="group-name" placeholder="Название группы (напр. ИС-22)" required>
+            <button type="submit">Добавить</button>
+          </form>
+        </div>
+
+        <div class="admin-block">
+          <h3>Добавить товар в магазин</h3>
+          <form id="form-new-product" class="inline-form">
+            <input type="text" id="product-name" placeholder="Название товара" required>
+            <textarea id="product-desc" placeholder="Описание" rows="2" style="padding:10px 12px; border-radius:var(--radius-sm); border:1px solid var(--border); background:var(--bg-1); color:var(--text-1); font-family:inherit; resize:vertical;"></textarea>
+            <input type="number" id="product-price" placeholder="Цена в золотых монетках" min="0" required>
+            <div class="avatar-upload-preview" id="product-photo-preview" style="height:110px;">
+              <span class="muted">Фото не выбрано</span>
+            </div>
+            <label class="composer-attach" style="width:100%; justify-content:center;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05 12.25 20.24a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+              Выбрать фото
+              <input type="file" id="product-photo-input" accept="image/*" hidden>
+            </label>
+            <div class="error" id="product-error"></div>
+            <button type="submit">Добавить товар</button>
+          </form>
+        </div>
+      </div>
+
+      <h3>Пользователи</h3>
+      <div id="admin-users-table"></div>
+
+      <h3 style="margin-top:28px;">Товары в магазине</h3>
+      <div id="admin-products-grid" class="shop-grid"></div>
+
+      <h3 style="margin-top:28px;">Заказы</h3>
+      <div id="admin-purchases-table"></div>
+
+      <h3 style="margin-top:28px; display:flex; align-items:center; gap:8px;">
+        Жалобы <span class="count-badge hidden" id="admin-reports-count"></span>
+      </h3>
+      <div id="admin-reports-table"></div>
+    </section>
+
+    <!-- РЕЗЕРВНЫЕ КОПИИ -->
+    <section id="view-backups" class="view hidden">
+      <h2>Резервные копии</h2>
+      <p class="muted" style="margin-top:-4px;">
+        Автоматические копии базы данных по расписанию, ручное создание и скачивание, восстановление из файла.
+      </p>
+
+      <div class="settings-block" style="max-width:620px;">
+        <h3>Автоматическое резервное копирование</h3>
+        <p class="muted">Раз в сколько дней делать копию автоматически.</p>
+        <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+          <input type="number" id="backup-interval-input" min="1" max="365" style="width:100px;">
+          <span class="muted">дней</span>
+          <button class="primary-btn" id="backup-interval-save">Сохранить</button>
+        </div>
+        <p class="muted" id="backup-schedule-info" style="margin-top:10px; margin-bottom:0;"></p>
+      </div>
+
+      <div class="settings-block" style="max-width:620px;">
+        <h3>Вручную</h3>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="primary-btn" id="backup-create-now">💾 Создать копию сейчас</button>
+          <button class="secondary-btn" id="backup-download-current">⬇️ Скачать текущую базу</button>
+        </div>
+      </div>
+
+      <div class="settings-block" style="max-width:620px;">
+        <h3>Восстановить из файла</h3>
+        <p class="muted">⚠️ Заменит все текущие данные содержимым загруженного файла. Перед восстановлением автоматически сохраняется копия текущего состояния — на случай ошибки.</p>
+        <label class="composer-attach" style="width:100%; justify-content:center;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05 12.25 20.24a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+          Выбрать файл резервной копии (.json)
+          <input type="file" id="backup-restore-input" accept="application/json,.json" hidden>
+        </label>
+        <div class="muted" id="backup-restore-filename"></div>
+        <div class="error" id="backup-restore-error"></div>
+        <button class="secondary-btn" id="backup-restore-btn" style="width:100%; margin-top:10px;" disabled>Восстановить из выбранного файла</button>
+      </div>
+
+      <h3 style="margin-top:24px;">Список резервных копий</h3>
+      <div id="backups-list-table"></div>
+    </section>
+
+  </main>
+</div>
+
+<!-- Модальное окно: новое задание -->
+<div id="modal-new-assignment" class="modal hidden">
+  <div class="modal-card wide">
+    <button class="modal-close" id="assign-cancel-x">✕</button>
+    <h3>Новое задание</h3>
+    <form id="form-new-assignment">
+      <input type="text" id="assign-title" placeholder="Название задания" required>
+
+      <div class="field-label">Тип задания</div>
+      <div class="type-picker" id="assign-type-picker">
+        <button type="button" class="type-option active" data-type="text">
+          <span class="type-option-title">📝 Текстовое</span>
+          <span class="type-option-sub">Письменный ответ, проверяет преподаватель</span>
+        </button>
+        <button type="button" class="type-option" data-type="test">
+          <span class="type-option-title">✅ Тест</span>
+          <span class="type-option-sub">Вопросы с вариантами, проверяется автоматически</span>
+        </button>
+        <button type="button" class="type-option" data-type="ar">
+          <span class="type-option-title">📍 Дополненная реальность</span>
+          <span class="type-option-sub">Метка на карте + камера телефона на месте</span>
+        </button>
+      </div>
+
+      <div id="assign-text-pane">
+        <textarea id="assign-desc" placeholder="Описание / условие задания" rows="5"></textarea>
+      </div>
+
+      <div id="assign-test-pane" class="hidden">
+        <div id="assign-questions"></div>
+        <button type="button" class="secondary-btn" id="assign-add-question" style="width:100%; margin-top:8px;">+ Добавить вопрос</button>
+      </div>
+
+      <div id="assign-ar-pane" class="hidden">
+        <input type="text" id="assign-ar-label" placeholder="Название точки интереса (напр. «Статуя основателя»)">
+        <textarea id="assign-ar-desc" placeholder="Комментарий — студент обязательно прочитает его на месте" rows="3"></textarea>
+
+        <div class="avatar-upload-preview" id="assign-ar-photo-preview" style="height:130px; margin-top:10px;">
+          <span class="muted">Фото точки интереса не выбрано</span>
+        </div>
+        <label class="composer-attach" style="width:100%; justify-content:center;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05 12.25 20.24a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+          Выбрать фото
+          <input type="file" id="assign-ar-photo-input" accept="image/*" hidden>
+        </label>
+
+        <div class="field-label">Отметьте точку на карте</div>
+        <div class="ar-map-picker-row">
+          <button type="button" class="secondary-btn" id="assign-ar-locate-btn">📍 Использовать моё текущее местоположение</button>
+          <span class="muted" id="assign-ar-coords-label">Точка не выбрана — кликните на карте</span>
+        </div>
+        <div id="assign-ar-map" class="ar-map ar-map-picker"></div>
+      </div>
+
+      <div class="field-label">Кому назначить</div>
+      <div class="tabs-switch">
+        <button type="button" id="assign-target-group-tab" class="switch-btn active">Целой группе</button>
+        <button type="button" id="assign-target-students-tab" class="switch-btn">Выбранным студентам</button>
+      </div>
+      <div id="assign-target-group-pane">
+        <select id="assign-group"></select>
+      </div>
+      <div id="assign-target-students-pane" class="hidden">
+        <input type="text" id="assign-student-search" placeholder="Найти студента по имени или логину..." autocomplete="off">
+        <div id="assign-student-results" class="user-search-results"></div>
+        <div id="assign-student-selected" class="chip-row"></div>
+      </div>
+
+      <input type="number" id="assign-xp" placeholder="Награда XP (например 20)" value="20" min="0">
+      <input type="number" id="assign-coins" placeholder="Золотые монетки за выполнение (например 10)" value="10" min="0">
+      <input type="date" id="assign-due">
+      <div class="error" id="assign-error"></div>
+      <div class="modal-actions">
+        <button type="button" id="assign-cancel" class="secondary-btn">Отмена</button>
+        <button type="submit" class="primary-btn">Создать</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Модальное окно: просмотр/выполнение задания -->
+<div id="modal-assignment-detail" class="modal hidden">
+  <div class="modal-card wide">
+    <button class="modal-close" id="detail-close">✕</button>
+    <div id="detail-content"></div>
+  </div>
+</div>
+
+<!-- Модальное окно: просмотр чужого профиля -->
+<div id="modal-user-profile" class="modal hidden">
+  <div class="modal-card wide">
+    <button class="modal-close" id="user-profile-close">✕</button>
+    <div id="user-profile-content"></div>
+  </div>
+</div>
+
+<!-- Модальное окно: просмотр истории -->
+<div id="modal-story-viewer" class="story-viewer hidden">
+  <div class="story-viewer-card">
+    <div class="story-progress-row" id="story-progress-row"></div>
+    <div class="story-viewer-header">
+      <div class="post-avatar" id="story-viewer-avatar"></div>
+      <div class="story-viewer-who">
+        <div id="story-viewer-name"></div>
+        <div class="muted" id="story-viewer-time"></div>
+      </div>
+      <button class="story-delete-btn hidden" id="story-viewer-delete">Удалить</button>
+      <button class="modal-close" id="story-viewer-close">✕</button>
+    </div>
+    <div class="story-viewer-media" id="story-viewer-media"></div>
+    <div class="story-viewer-caption hidden" id="story-viewer-caption"></div>
+    <button class="story-nav-btn story-nav-prev" id="story-nav-prev" aria-label="Предыдущая">‹</button>
+    <button class="story-nav-btn story-nav-next" id="story-nav-next" aria-label="Следующая">›</button>
+  </div>
+</div>
+
+<!-- Модальное окно: переслать сообщение -->
+<div id="modal-forward" class="modal hidden">
+  <div class="modal-card">
+    <button class="modal-close" id="forward-close">✕</button>
+    <h3>Переслать сообщение</h3>
+    <div id="forward-chat-list" class="user-search-results" style="max-height:360px;"></div>
+  </div>
+</div>
+
+<!-- Модальное окно: новый чат (личный или группа) -->
+<div id="modal-new-chat" class="modal hidden">
+  <div class="modal-card">
+    <button class="modal-close" id="new-chat-close">✕</button>
+    <h3>Новый чат</h3>
+    <div class="tabs-switch">
+      <button id="newchat-tab-direct" class="switch-btn active">Личное сообщение</button>
+      <button id="newchat-tab-group" class="switch-btn">Групповой чат</button>
+    </div>
+
+    <div id="newchat-direct-pane">
+      <input type="text" id="newchat-search" placeholder="Введите имя или логин..." autocomplete="off">
+      <div id="newchat-search-results" class="user-search-results"></div>
+    </div>
+
+    <div id="newchat-group-pane" class="hidden">
+      <input type="text" id="newchat-group-name" placeholder="Название группового чата">
+      <input type="text" id="newchat-group-member-search" placeholder="Добавить участников..." autocomplete="off">
+      <div id="newchat-group-member-results" class="user-search-results"></div>
+      <div id="newchat-group-selected" class="chip-row"></div>
+      <div class="error" id="newchat-group-error"></div>
+      <button id="newchat-group-create" class="primary-btn" style="width:100%; margin-top:10px;">Создать группу</button>
+    </div>
+  </div>
+</div>
+
+<!-- Модальное окно: выбор/загрузка аватара -->
+<div id="modal-avatar-picker" class="modal hidden">
+  <div class="modal-card">
+    <button class="modal-close" id="avatar-picker-close">✕</button>
+    <h3>Аватар профиля</h3>
+    <div class="tabs-switch">
+      <button id="avatar-tab-photo" class="switch-btn active">Своё фото</button>
+      <button id="avatar-tab-color" class="switch-btn">Значок</button>
+    </div>
+
+    <div id="avatar-photo-pane">
+      <div class="avatar-upload-preview" id="avatar-upload-preview">
+        <span class="muted">Фото не выбрано</span>
+      </div>
+      <label class="composer-attach" style="width:100%; justify-content:center;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05 12.25 20.24a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+        Выбрать файл
+        <input type="file" id="avatar-file-input" accept="image/*" hidden>
+      </label>
+      <div class="error" id="avatar-photo-error"></div>
+      <button class="primary-btn" id="avatar-photo-save" style="width:100%; margin-top:10px;">Сохранить фото</button>
+    </div>
+
+    <div id="avatar-color-pane" class="hidden">
+      <div class="avatar-color-grid" id="avatar-color-grid"></div>
+      <div class="error" id="avatar-color-error"></div>
+    </div>
+
+    <button class="secondary-btn" id="avatar-reset-btn" style="width:100%; margin-top:12px;">Сбросить к значку по умолчанию</button>
+  </div>
+</div>
+
+<!-- Модальное окно: жалоба на пользователя -->
+<div id="modal-report" class="modal hidden">
+  <div class="modal-card">
+    <button class="modal-close" id="report-close">✕</button>
+    <h3>Пожаловаться</h3>
+    <p class="muted" id="report-target-label"></p>
+    <form id="report-form">
+      <textarea id="report-reason" rows="4" placeholder="Опишите, что произошло..." required></textarea>
+      <div class="error" id="report-error"></div>
+      <div class="modal-actions">
+        <button type="button" class="secondary-btn" id="report-cancel">Отмена</button>
+        <button type="submit" class="primary-btn">Отправить жалобу</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!--
+  Карта работает на Яндекс.Картах (российский сервис). Нужен бесплатный API-ключ:
+  1. Зарегистрируйтесь на https://developer.tech.yandex.ru/
+  2. Создайте ключ для «JavaScript API и HTTP Геокодер»
+  3. Вставьте его вместо YOUR_YANDEX_MAPS_API_KEY ниже
+-->
+<script src="https://api-maps.yandex.ru/2.1/?apikey=YOUR_YANDEX_MAPS_API_KEY&lang=ru_RU" type="text/javascript"></script>
+<script src="/js/protect.js"></script>
+<script src="/js/app.js"></script>
+</body>
+</html>

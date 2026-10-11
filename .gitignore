@@ -1,0 +1,30 @@
+# Dependencies
+**/node_modules/
+**/dist/
+
+# Logs & temp
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment variables & editor
+.env
+.env.*
+.vscode/
+.idea/
+
+# Legacy archives
+AXIOM LAB.html
+college-ecosystem.zip
+Hermes/
+test_*.js
+test_*.ps1
+
+# Backup files (ignore automated hourly dumps, keep data.json)
+backend/backups/*.json
+!backend/backups/.gitkeep

@@ -1,0 +1,114 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-paper: #09090b;
+  --color-paper-soft: #050507;
+  --color-ink: #f4f4f5;
+  --color-accent: #FF5500;
+  --color-accent-soft: rgba(255, 85, 0, 0.15);
+  --color-border: rgba(255, 255, 255, 0.12);
+  --color-card: #09090c;
+  --color-grid-line: rgba(255, 255, 255, 0.04);
+  --font-bit: "Bitcount Grid Single", "Kode Mono", monospace;
+  --font-mono: "Kode Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --font-chart: "Geist Mono", ui-monospace, monospace;
+}
+
+html.theme-light {
+  --color-paper: #ffffff;
+  --color-paper-soft: #f4f4f5;
+  --color-ink: #09090b;
+  --color-border: rgba(0, 0, 0, 0.14);
+  --color-card: #ffffff;
+  --color-grid-line: rgba(0, 0, 0, 0.06);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--color-paper-soft);
+  color: var(--color-ink);
+}
+
+body {
+  font-family: var(--font-mono);
+  overflow-x: clip;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  background-color: var(--color-paper-soft);
+  color: var(--color-ink);
+}
+
+::selection {
+  background-color: var(--color-accent);
+  color: #000000;
+}
+
+/* Background grid with technical fine lines */
+.bg-grid {
+  background-image:
+    linear-gradient(90deg, var(--color-grid-line) 1px, transparent 1px),
+    linear-gradient(var(--color-grid-line) 1px, transparent 1px);
+  background-size: 72px 72px;
+}
+
+.label-mono {
+  font-family: var(--font-mono);
+  letter-spacing: 0.125em;
+  text-transform: uppercase;
+}
+
+/* Cursor blinking animation for formula typewriter */
+@keyframes cursor-blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.cursor-blink {
+  animation: 1s step-end infinite cursor-blink;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-paper-soft);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(128, 128, 128, 0.3);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent);
+}
+
+/* Touch action optimization and smooth tap highlights */
+button, a, input, select, textarea {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Safe area padding helper for modern iPhones & Androids */
+.safe-area-pb {
+  padding-bottom: max(0.75rem, env(safe-area-inset-bottom, 0.75rem));
+}
+
+.safe-area-pt {
+  padding-top: max(0.5rem, env(safe-area-inset-top, 0.5rem));
+}

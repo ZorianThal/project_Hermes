@@ -1,0 +1,24 @@
+{
+  "id": "/",
+  "name": "Project_Fenrir - Hell_Gate",
+  "short_name": "Hell_Gate",
+  "description": "Unrestricted cloud agent environment replicating Antigravity with full machine access and IDE.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#020617",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
