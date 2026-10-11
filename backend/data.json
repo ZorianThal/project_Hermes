@@ -14,7 +14,7 @@
       "avatarUrl": null,
       "avatarColor": "orange",
       "coins": 145,
-      "lastActiveAt": 1791753277432,
+      "lastActiveAt": 1791754950115,
       "unlockedColors": [
         "#FF4D1C",
         "#10B981"
@@ -27,7 +27,7 @@
       },
       "pet": {
         "name": "КИБЕР-НОКТУА",
-        "hunger": 100,
+        "hunger": 97,
         "happiness": 100,
         "energy": 100,
         "level": 4,
@@ -91,7 +91,7 @@
       "type": "general",
       "members": null,
       "reads": {
-        "1": 1791753107998,
+        "1": 1791754952063,
         "2": 1791679960480,
         "3": 1791742741744,
         "4": 1791680858226
